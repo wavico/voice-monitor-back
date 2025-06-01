@@ -26,6 +26,14 @@ RUN curl -fsSL https://packages.grafana.com/gpg.key | gpg --dearmor -o /usr/shar
     && apt-get install -y grafana \
     && rm -rf /var/lib/apt/lists/*
 
+# Create Grafana directories and set permissions
+RUN mkdir -p /var/lib/grafana \
+    && mkdir -p /var/log/grafana \
+    && mkdir -p /var/lib/grafana/plugins \
+    && chown -R grafana:grafana /var/lib/grafana \
+    && chown -R grafana:grafana /var/log/grafana \
+    && chown -R grafana:grafana /usr/share/grafana
+
 # Copy requirements first for better caching
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
