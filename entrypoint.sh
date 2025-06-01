@@ -26,6 +26,13 @@ wait_for_service localhost 9090 "Prometheus"
 
 # Start Grafana in the background with debug mode
 echo "Starting Grafana..."
+/usr/sbin/grafana-server \
+  --config=/etc/grafana/grafana.ini \
+  --homepath=/usr/share/grafana \
+  --pidfile=/var/run/grafana/grafana-server.pid \
+  --packaging=docker \
+  cfg:default.log.mode=console \
+  --debug &
 
 
 # Wait for Grafana to be ready
