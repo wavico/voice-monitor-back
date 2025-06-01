@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Add Prometheus and Grafana to PATH
+export PATH="/usr/local/bin:$PATH"
+
 # Function to wait for a service to be ready
 wait_for_service() {
     local host=$1
@@ -16,14 +19,14 @@ wait_for_service() {
 
 # Start Prometheus in the background
 echo "Starting Prometheus..."
-prometheus --config.file=/app/prometheus/prometheus.yml --storage.tsdb.path=/prometheus &
+/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus &
 
 # Wait for Prometheus to be ready
 wait_for_service localhost 9090 "Prometheus"
 
 # Start Grafana in the background
 echo "Starting Grafana..."
-grafana-server --config=/app/grafana/grafana.ini --homepath=/usr/share/grafana &
+/usr/sbin/grafana-server --config=/app/grafana/grafana.ini --homepath=/usr/share/grafana &
 
 # Wait for Grafana to be ready
 wait_for_service localhost 3000 "Grafana"
