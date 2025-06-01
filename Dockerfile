@@ -30,9 +30,11 @@ RUN curl -fsSL https://packages.grafana.com/gpg.key | gpg --dearmor -o /usr/shar
 RUN mkdir -p /var/lib/grafana \
     && mkdir -p /var/log/grafana \
     && mkdir -p /var/lib/grafana/plugins \
+    && mkdir -p /var/run/grafana \
     && chown -R grafana:grafana /var/lib/grafana \
     && chown -R grafana:grafana /var/log/grafana \
-    && chown -R grafana:grafana /usr/share/grafana
+    && chown -R grafana:grafana /usr/share/grafana \
+    && chown -R grafana:grafana /var/run/grafana
 
 # Copy requirements first for better caching
 COPY requirements.txt .

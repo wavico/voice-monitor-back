@@ -24,9 +24,13 @@ echo "Starting Prometheus..."
 # Wait for Prometheus to be ready
 wait_for_service localhost 9090 "Prometheus"
 
-# Start Grafana in the background
+# Start Grafana in the background with debug mode
 echo "Starting Grafana..."
-su grafana -c "/usr/sbin/grafana-server --config=/app/grafana/grafana.ini --homepath=/usr/share/grafana --pidfile=/var/run/grafana/grafana-server.pid cfg:default.paths.data=/var/lib/grafana cfg:default.paths.logs=/var/log/grafana cfg:default.paths.plugins=/var/lib/grafana/plugins" &
+su grafana -c "/usr/sbin/grafana-server \
+    --config=/app/grafana/grafana.ini \
+    --homepath=/usr/share/grafana \
+    --pidfile=/var/run/grafana/grafana-server.pid \
+    -debug" &
 
 # Wait for Grafana to be ready
 wait_for_service localhost 3000 "Grafana"
