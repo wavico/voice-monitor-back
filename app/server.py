@@ -123,7 +123,7 @@ async def dashboard(request: Request):
         <div class="container">
             <h1>Voice Monitor Dashboard</h1>
             <div class="dashboard-container">
-                <iframe src="http://localhost:3000/d/default/fastapi-monitoring?orgId=1&refresh=5s" 
+                <iframe src="http://localhost:3001/d/default/fastapi-monitoring?orgId=1&refresh=5s" 
                         width="100%" 
                         height="800px" 
                         frameborder="0">
