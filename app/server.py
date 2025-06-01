@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Request
 from kafka import KafkaProducer
 import json
-import tritonclient.grpc
 from prometheus_fastapi_instrumentator import Instrumentator
 from prometheus_client import start_http_server, Gauge, Counter, REGISTRY
 import threading
@@ -44,8 +43,6 @@ transaction_success = Counter('transaction_success', 'Number of successful trans
 transaction_failure = Counter('transaction_failure', 'Number of failed transactions')
 transaction_processing_time = Gauge('transaction_processing_time', 'Transaction processing time in seconds')
 
-def triton_infer(data: dict):
-    return {"inference": "dummy"}
 
 @app.get("/")
 async def root():
@@ -65,7 +62,7 @@ async def predict(data: dict):
             producer.flush()
 
         # 3. Triton 추론 요청
-        response = triton_infer(data)
+        response = data
 
         # 4. 성공 메트릭 업데이트
         transaction_success.inc()
