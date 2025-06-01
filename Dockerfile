@@ -58,6 +58,19 @@ RUN chmod +x entrypoint.sh
 # Create necessary directories
 RUN mkdir -p /prometheus /grafana
 
+WORKDIR /app
+COPY . /app
+
+RUN pip install --no-cache-dir \
+    kafka-python \
+    fastapi \
+    uvicorn \
+    prometheus_client \
+    prometheus-fastapi-instrumentator \
+    tritonclient[grpc]
+
+CMD ["uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]
+
 # Expose necessary ports
 # FastAPI: 8000, Grafana: 3000, Prometheus: 9090
 EXPOSE 8000 3000 9090

@@ -9,6 +9,7 @@ import random
 from fastapi import Body
 from fastapi.middleware.cors import CORSMiddleware
 import time
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
@@ -83,6 +84,60 @@ async def predict(data: dict):
 @app.get("/metrics")
 async def get_metrics():
     return REGISTRY.get_sample_value('transaction_count')
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    html_content = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Voice Monitor Dashboard</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+                background-color: #f0f2f5;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            h1 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+            }
+            .dashboard-container {
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            iframe {
+                border: none;
+                border-radius: 4px;
+                width: 100%;
+                height: 800px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Voice Monitor Dashboard</h1>
+            <div class="dashboard-container">
+                <iframe src="http://localhost:3000/d/default/fastapi-monitoring?orgId=1&refresh=5s" 
+                        width="100%" 
+                        height="800px" 
+                        frameborder="0">
+                </iframe>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
+
 
 # Prometheus HTTP endpoint 노출
 threading.Thread(target=lambda: start_http_server(9101)).start()
