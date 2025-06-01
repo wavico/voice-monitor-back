@@ -30,8 +30,8 @@ echo "Starting Grafana..."
   --config=/etc/grafana/grafana.ini \
   --homepath=/usr/share/grafana \
   --pidfile=/var/run/grafana/grafana-server.pid \
-  --http.port=3000 \   # 👈 이 부분 중요
-  --packaging=docker \
+  --http.port=3000 \   
+  cfg:server.http_port=docker \
   cfg:default.log.mode=console \
   --debug &
 
