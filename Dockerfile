@@ -31,10 +31,14 @@ RUN mkdir -p /var/lib/grafana \
     && mkdir -p /var/log/grafana \
     && mkdir -p /var/lib/grafana/plugins \
     && mkdir -p /var/run/grafana \
+    && mkdir -p /var/lib/grafana/dashboards \
+    && mkdir -p /etc/grafana/provisioning/dashboards \
+    && mkdir -p /etc/grafana/provisioning/datasources \
     && chown -R grafana:grafana /var/lib/grafana \
     && chown -R grafana:grafana /var/log/grafana \
     && chown -R grafana:grafana /usr/share/grafana \
-    && chown -R grafana:grafana /var/run/grafana
+    && chown -R grafana:grafana /var/run/grafana \
+    && chown -R grafana:grafana /etc/grafana
 
 # Copy requirements first for better caching
 COPY requirements.txt .
@@ -42,6 +46,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code and entrypoint script
 COPY . .
+
+# Copy Grafana configuration files
+COPY grafana/provisioning/dashboards/default.yml /etc/grafana/provisioning/dashboards/
+COPY grafana/provisioning/datasources/prometheus.yml /etc/grafana/provisioning/datasources/
+COPY grafana/dashboards/default.json /var/lib/grafana/dashboards/
+COPY grafana/grafana.ini /etc/grafana/grafana.ini
+
 RUN chmod +x entrypoint.sh
 
 # Create necessary directories
