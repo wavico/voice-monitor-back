@@ -37,4 +37,5 @@ wait_for_service localhost 3000 "Grafana"
 
 # Start FastAPI
 echo "Starting FastAPI application..."
-uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
+uvicorn app.server:app --host 0.0.0.0 --port ${PORT:-8000}
+
