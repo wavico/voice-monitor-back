@@ -76,4 +76,4 @@ CMD ["uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]
 EXPOSE 8000 3000 9090
 
 # Set the entrypoint
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
