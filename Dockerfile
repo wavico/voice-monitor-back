@@ -53,8 +53,13 @@ COPY grafana/provisioning/dashboards/default.yml /etc/grafana/provisioning/dashb
 COPY grafana/provisioning/datasources/prometheus.yml /etc/grafana/provisioning/datasources/
 COPY grafana/dashboards/fastapi-monitoring.json /var/lib/grafana/dashboards/fastapi-monitoring.json
 
-# Verify dashboard file was copied - BUILD_ID to bust cache
-RUN echo "Build: 2025-10-13-v2" && ls -la /var/lib/grafana/dashboards/ && cat /var/lib/grafana/dashboards/fastapi-monitoring.json | head -20
+# Verify dashboard file was copied and fix permissions
+RUN echo "Build: 2025-10-13-v3" && \
+    ls -la /var/lib/grafana/dashboards/ && \
+    cat /var/lib/grafana/dashboards/fastapi-monitoring.json | head -20 && \
+    chown -R grafana:grafana /var/lib/grafana/dashboards && \
+    chown -R grafana:grafana /etc/grafana/provisioning && \
+    echo "Permissions fixed!"
 
 # Copy application code and entrypoint script
 COPY app ./app
