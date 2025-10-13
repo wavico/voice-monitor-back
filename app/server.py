@@ -137,4 +137,6 @@ async def dashboard(request: Request):
 
 
 # Prometheus HTTP endpoint 노출
-threading.Thread(target=lambda: start_http_server(9101)).start()
+# Railway는 단일 포트만 지원하므로 별도 Prometheus 서버 비활성화
+# 메트릭은 FastAPI의 /metrics 엔드포인트에서 제공됨
+# threading.Thread(target=lambda: start_http_server(9101)).start()
