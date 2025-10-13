@@ -98,6 +98,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "FastAPI Monitoring",
+  "uid": "default",
   "version": 0,
   "weekStart": ""
 } 
