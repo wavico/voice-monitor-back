@@ -179,7 +179,7 @@ async def dashboard(request: Request):
                 📊 실시간 거래 모니터링 대시보드 (Grafana)
             </div>
             <div class="dashboard-container">
-                <iframe src="{base_url}/grafana/d/default/fastapi-monitoring?orgId=1&refresh=5s" 
+                <iframe src="{base_url}/grafana/d/default/fastapi-monitoring/?orgId=1&refresh=5s" 
                         width="100%" 
                         height="800px" 
                         frameborder="0"
