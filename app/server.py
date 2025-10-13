@@ -8,7 +8,8 @@ import random
 from fastapi import Body
 from fastapi.middleware.cors import CORSMiddleware
 import time
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, Response, StreamingResponse
+import httpx
 
 app = FastAPI()
 
@@ -82,51 +83,103 @@ async def predict(data: dict):
 async def get_metrics():
     return REGISTRY.get_sample_value('transaction_count')
 
+# Grafana 프록시 엔드포인트 (모든 경로를 프록시)
+@app.api_route("/grafana/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
+async def grafana_proxy(path: str, request: Request):
+    """Grafana 요청을 내부 Grafana 서버(3001)로 프록시"""
+    grafana_url = f"http://localhost:3001/{path}"
+    
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        # 원본 요청의 쿼리 파라미터 가져오기
+        query_params = str(request.url.query)
+        if query_params:
+            grafana_url += f"?{query_params}"
+        
+        try:
+            # 요청 전달
+            response = await client.request(
+                method=request.method,
+                url=grafana_url,
+                headers={k: v for k, v in request.headers.items() 
+                        if k.lower() not in ['host', 'connection']},
+                content=await request.body()
+            )
+            
+            # 응답 헤더 필터링 (CORS 관련)
+            headers = {k: v for k, v in response.headers.items() 
+                      if k.lower() not in ['content-encoding', 'transfer-encoding', 'connection']}
+            
+            return Response(
+                content=response.content,
+                status_code=response.status_code,
+                headers=headers
+            )
+        except Exception as e:
+            print(f"Grafana proxy error: {e}")
+            return Response(
+                content=f"Grafana connection error: {str(e)}",
+                status_code=503
+            )
+
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    html_content = """
+    # Railway 배포된 URL 가져오기
+    base_url = str(request.base_url).rstrip('/')
+    
+    html_content = f"""
     <!DOCTYPE html>
     <html>
     <head>
         <title>Voice Monitor Dashboard</title>
         <style>
-            body {
+            body {{
                 margin: 0;
                 padding: 20px;
                 font-family: Arial, sans-serif;
                 background-color: #f0f2f5;
-            }
-            .container {
+            }}
+            .container {{
                 max-width: 1200px;
                 margin: 0 auto;
-            }
-            h1 {
+            }}
+            h1 {{
                 color: #2c3e50;
                 margin-bottom: 20px;
-            }
-            .dashboard-container {
+            }}
+            .dashboard-container {{
                 background: white;
                 border-radius: 8px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 padding: 20px;
                 margin-bottom: 20px;
-            }
-            iframe {
+            }}
+            iframe {{
                 border: none;
                 border-radius: 4px;
                 width: 100%;
                 height: 800px;
-            }
+            }}
+            .info {{
+                background: #e3f2fd;
+                padding: 10px;
+                border-radius: 4px;
+                margin-bottom: 20px;
+                color: #1565c0;
+            }}
         </style>
     </head>
     <body>
         <div class="container">
             <h1>Voice Monitor Dashboard</h1>
+            <div class="info">
+                📊 실시간 거래 모니터링 대시보드 (Grafana)
+            </div>
             <div class="dashboard-container">
-                <iframe src="http://localhost:3001/d/default/fastapi-monitoring?orgId=1&refresh=5s" 
+                <iframe src="{base_url}/grafana/d/default/fastapi-monitoring?orgId=1&refresh=5s" 
                         width="100%" 
                         height="800px" 
-                        frameborder="0">
+                        frameborder="0"
+                        allow="fullscreen">
                 </iframe>
             </div>
         </div>
