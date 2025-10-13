@@ -87,7 +87,8 @@ echo "========================================="
   cfg:server.serve_from_sub_path=true \
   cfg:security.allow_embedding=true \
   cfg:security.cookie_samesite=none \
-  cfg:security.cookie_secure=false &
+  cfg:security.cookie_secure=false \
+  cfg:live.max_connections=0 &
 
 # Wait for Grafana to be ready
 wait_for_service localhost 3001 "Grafana"
