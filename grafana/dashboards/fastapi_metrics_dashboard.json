@@ -7,6 +7,7 @@
       }
     ]
   },
+  "id": 2,
   "title": "이상거래 탐지 모니터링",
   "timezone": "browser",
   "schemaVersion": 35,

@@ -51,7 +51,7 @@ RUN mkdir -p /prometheus /grafana /var/lib/grafana/dashboards
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/dashboards/default.yml /etc/grafana/provisioning/dashboards/
 COPY grafana/provisioning/datasources/datasource.yml /etc/grafana/provisioning/datasources/
-COPY grafana/dashboards/fastapi-monitoring.json /var/lib/grafana/dashboards/fastapi-monitoring.json
+COPY grafana/dashboards/*.json /var/lib/grafana/dashboards/
 
 # Verify dashboard file was copied and fix permissions
 RUN echo "Build: 2025-10-13-v3" && \
