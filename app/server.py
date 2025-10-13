@@ -101,6 +101,55 @@ async def debug_grafana_dashboards():
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
+@app.get("/debug/filesystem")
+async def debug_filesystem():
+    """런타임 파일 시스템 확인"""
+    import subprocess
+    
+    results = {}
+    
+    # 대시보드 파일 확인
+    try:
+        ls_result = subprocess.run(
+            ["ls", "-la", "/var/lib/grafana/dashboards/"],
+            capture_output=True, text=True
+        )
+        results["dashboard_files"] = ls_result.stdout
+    except Exception as e:
+        results["dashboard_files"] = f"Error: {str(e)}"
+    
+    # provisioning 설정 확인
+    try:
+        ls_result = subprocess.run(
+            ["ls", "-la", "/etc/grafana/provisioning/dashboards/"],
+            capture_output=True, text=True
+        )
+        results["provisioning_files"] = ls_result.stdout
+    except Exception as e:
+        results["provisioning_files"] = f"Error: {str(e)}"
+    
+    # 파일 내용 확인
+    try:
+        cat_result = subprocess.run(
+            ["cat", "/etc/grafana/provisioning/dashboards/default.yml"],
+            capture_output=True, text=True
+        )
+        results["provisioning_config"] = cat_result.stdout
+    except Exception as e:
+        results["provisioning_config"] = f"Error: {str(e)}"
+    
+    # 파일 권한 확인
+    try:
+        stat_result = subprocess.run(
+            ["stat", "/var/lib/grafana/dashboards/fastapi-monitoring.json"],
+            capture_output=True, text=True
+        )
+        results["file_permissions"] = stat_result.stdout
+    except Exception as e:
+        results["file_permissions"] = f"Error: {str(e)}"
+    
+    return results
+
 # Grafana 프록시 엔드포인트 (모든 경로를 프록시)
 @app.api_route("/grafana/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
 async def grafana_proxy(path: str, request: Request):
