@@ -44,7 +44,7 @@ RUN mkdir -p /var/lib/grafana \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Create necessary directories first
+# FORCE REBUILD: Create necessary directories first
 RUN mkdir -p /prometheus /grafana /var/lib/grafana/dashboards
 
 # Copy Grafana configuration files BEFORE copying app code
