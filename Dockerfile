@@ -44,19 +44,24 @@ RUN mkdir -p /var/lib/grafana \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code and entrypoint script
-COPY . .
+# Create necessary directories first
+RUN mkdir -p /prometheus /grafana /var/lib/grafana/dashboards
 
-# Copy Grafana configuration files
+# Copy Grafana configuration files BEFORE copying app code
+COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/dashboards/default.yml /etc/grafana/provisioning/dashboards/
 COPY grafana/provisioning/datasources/prometheus.yml /etc/grafana/provisioning/datasources/
-COPY grafana/dashboards/*.json /var/lib/grafana/dashboards/
-COPY grafana/grafana.ini /etc/grafana/grafana.ini
+COPY grafana/dashboards/fastapi-monitoring.json /var/lib/grafana/dashboards/fastapi-monitoring.json
+
+# Verify dashboard file was copied
+RUN ls -la /var/lib/grafana/dashboards/ && cat /var/lib/grafana/dashboards/fastapi-monitoring.json | head -20
+
+# Copy application code and entrypoint script
+COPY app ./app
+COPY entrypoint.sh .
+COPY prometheus ./prometheus
 
 RUN chmod +x entrypoint.sh
-
-# Create necessary directories
-RUN mkdir -p /prometheus /grafana
 
 
 # Expose necessary ports
