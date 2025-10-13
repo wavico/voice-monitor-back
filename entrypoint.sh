@@ -88,7 +88,8 @@ echo "========================================="
   cfg:security.allow_embedding=true \
   cfg:security.cookie_samesite=none \
   cfg:security.cookie_secure=false \
-  cfg:live.max_connections=0 &
+  cfg:live.max_connections=0 \
+  cfg:paths.provisioning=/etc/grafana/provisioning &
 
 # Wait for Grafana to be ready
 wait_for_service localhost 3001 "Grafana"
