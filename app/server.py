@@ -83,6 +83,24 @@ async def predict(data: dict):
 async def get_metrics():
     return REGISTRY.get_sample_value('transaction_count')
 
+@app.get("/debug/grafana-dashboards")
+async def debug_grafana_dashboards():
+    """Grafana 대시보드 목록 확인"""
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            # Grafana API로 대시보드 목록 조회
+            response = await client.get(
+                "http://localhost:3001/grafana/api/search",
+                params={"type": "dash-db"}
+            )
+            return {
+                "status": "ok",
+                "dashboards": response.json(),
+                "access_url": "/grafana/d/fastapi-monitoring/fastapi-monitoring"
+            }
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
 # Grafana 프록시 엔드포인트 (모든 경로를 프록시)
 @app.api_route("/grafana/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
 async def grafana_proxy(path: str, request: Request):
