@@ -99,7 +99,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "FastAPI Monitoring",
-  "uid": "default",
+  "uid": "fastapi-monitoring",
   "version": 0,
   "weekStart": ""
 } 
