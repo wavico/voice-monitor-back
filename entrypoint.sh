@@ -33,6 +33,8 @@ echo "Starting Grafana..."
   --packaging=docker \
   cfg:default.log.mode=console \
   cfg:server.http_port=3001 \
+  cfg:server.root_url=http://localhost:3001/grafana/ \
+  cfg:server.serve_from_sub_path=true \
   cfg:security.allow_embedding=true \
   cfg:security.cookie_samesite=none \
   cfg:security.cookie_secure=false \
