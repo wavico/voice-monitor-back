@@ -4,6 +4,9 @@ set -e
 # Add Prometheus and Grafana to PATH
 export PATH="/usr/local/bin:$PATH"
 
+# Railway 포트 설정 (기본값 8000)
+export APP_PORT=${PORT:-8000}
+
 # Function to wait for a service to be ready
 wait_for_service() {
     local host=$1
@@ -16,6 +19,20 @@ wait_for_service() {
     done
     echo "$service is ready!"
 }
+
+# Prometheus 설정 파일 동적 생성
+echo "Generating Prometheus config for port $APP_PORT..."
+cat > /etc/prometheus/prometheus.yml << EOF
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: "fastapi"
+    static_configs:
+      - targets: ["localhost:$APP_PORT"]
+    metrics_path: "/metrics"
+EOF
 
 # Start Prometheus in the background
 echo "Starting Prometheus..."
