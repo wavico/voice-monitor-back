@@ -87,9 +87,9 @@ async def get_metrics():
 @app.api_route("/grafana/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
 async def grafana_proxy(path: str, request: Request):
     """Grafana 요청을 내부 Grafana 서버(3001)로 프록시"""
-    grafana_url = f"http://localhost:3001/{path}"
+    grafana_url = f"http://localhost:3001/grafana/{path}"
     
-    async with httpx.AsyncClient(timeout=30.0) as client:
+    async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
         # 원본 요청의 쿼리 파라미터 가져오기
         query_params = str(request.url.query)
         if query_params:
