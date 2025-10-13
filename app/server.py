@@ -105,9 +105,10 @@ async def grafana_proxy(path: str, request: Request):
                 content=await request.body()
             )
             
-            # 응답 헤더 필터링 (CORS 관련)
+            # 응답 헤더 필터링 (iframe 차단 헤더 제거)
             headers = {k: v for k, v in response.headers.items() 
-                      if k.lower() not in ['content-encoding', 'transfer-encoding', 'connection']}
+                      if k.lower() not in ['content-encoding', 'transfer-encoding', 'connection', 
+                                           'x-frame-options', 'content-security-policy']}
             
             return Response(
                 content=response.content,
