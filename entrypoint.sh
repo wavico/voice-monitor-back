@@ -82,22 +82,20 @@ echo "========================================="
   --pidfile=/var/run/grafana/grafana-server.pid \
   --packaging=docker \
   cfg:default.log.mode=console \
-  cfg:server.http_port=3001 \
-  cfg:server.root_url=http://localhost:3001/grafana/ \
-  cfg:server.serve_from_sub_path=true \
+  cfg:server.http_port=3000 \
   cfg:security.allow_embedding=true \
   cfg:security.cookie_samesite=none \
   cfg:security.cookie_secure=false \
   cfg:live.max_connections=0 &
 
 # Wait for Grafana to be ready
-wait_for_service localhost 3001 "Grafana"
+wait_for_service localhost 3000 "Grafana"
 
 echo "========================================="
 echo "✓ All services started successfully!"
 echo "  - FastAPI:    localhost:$APP_PORT"
 echo "  - Prometheus: localhost:9090"
-echo "  - Grafana:    localhost:3001"
+echo "  - Grafana:    localhost:3000"
 echo "========================================="
 
 # Keep FastAPI running in foreground
