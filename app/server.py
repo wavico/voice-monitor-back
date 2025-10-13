@@ -123,8 +123,11 @@ async def grafana_proxy(path: str, request: Request):
 
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    # Railway 배포된 URL 가져오기
+    # Railway 배포된 URL 가져오기 (HTTPS 강제)
     base_url = str(request.base_url).rstrip('/')
+    # Railway는 HTTPS를 제공하므로 강제로 https로 변경
+    if base_url.startswith('http://'):
+        base_url = base_url.replace('http://', 'https://', 1)
     
     html_content = f"""
     <!DOCTYPE html>
