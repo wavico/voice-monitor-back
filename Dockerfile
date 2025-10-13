@@ -44,7 +44,7 @@ RUN mkdir -p /var/lib/grafana \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# FORCE REBUILD: Create necessary directories first
+# Create necessary directories first
 RUN mkdir -p /prometheus /grafana /var/lib/grafana/dashboards
 
 # Copy Grafana configuration files BEFORE copying app code
@@ -53,8 +53,8 @@ COPY grafana/provisioning/dashboards/default.yml /etc/grafana/provisioning/dashb
 COPY grafana/provisioning/datasources/prometheus.yml /etc/grafana/provisioning/datasources/
 COPY grafana/dashboards/fastapi-monitoring.json /var/lib/grafana/dashboards/fastapi-monitoring.json
 
-# Verify dashboard file was copied
-RUN ls -la /var/lib/grafana/dashboards/ && cat /var/lib/grafana/dashboards/fastapi-monitoring.json | head -20
+# Verify dashboard file was copied - BUILD_ID to bust cache
+RUN echo "Build: 2025-10-13-v2" && ls -la /var/lib/grafana/dashboards/ && cat /var/lib/grafana/dashboards/fastapi-monitoring.json | head -20
 
 # Copy application code and entrypoint script
 COPY app ./app
