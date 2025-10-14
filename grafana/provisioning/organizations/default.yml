@@ -1,0 +1,6 @@
+apiVersion: 1
+
+organizations:
+  - name: Main Org.
+    orgId: 1
+    homeDashboardUID: fastapi-metrics-dashboard

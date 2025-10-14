@@ -34,6 +34,7 @@ RUN mkdir -p /var/lib/grafana \
     && mkdir -p /var/lib/grafana/dashboards \
     && mkdir -p /etc/grafana/provisioning/dashboards \
     && mkdir -p /etc/grafana/provisioning/datasources \
+    && mkdir -p /etc/grafana/provisioning/organizations \
     && chown -R grafana:grafana /var/lib/grafana \
     && chown -R grafana:grafana /var/log/grafana \
     && chown -R grafana:grafana /usr/share/grafana \
@@ -51,6 +52,7 @@ RUN mkdir -p /prometheus /grafana /var/lib/grafana/dashboards
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/dashboards/default.yml /etc/grafana/provisioning/dashboards/
 COPY grafana/provisioning/datasources/datasource.yml /etc/grafana/provisioning/datasources/
+COPY grafana/provisioning/organizations/default.yml /etc/grafana/provisioning/organizations/
 COPY grafana/dashboards/*.json /var/lib/grafana/dashboards/
 
 # Verify dashboard files were copied and fix permissions
