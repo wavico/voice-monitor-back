@@ -53,15 +53,13 @@ COPY grafana/provisioning/dashboards/default.yml /etc/grafana/provisioning/dashb
 COPY grafana/provisioning/datasources/datasource.yml /etc/grafana/provisioning/datasources/
 COPY grafana/dashboards/*.json /var/lib/grafana/dashboards/
 
-# Verify dashboard file was copied and fix permissions
-RUN echo "Build: 2025-10-13-v4" && \
+# Verify dashboard files were copied and fix permissions
+RUN echo "Build: 2025-10-15-v1" && \
     echo "=== Dashboard files ===" && \
     ls -la /var/lib/grafana/dashboards/ && \
     echo "=== Provisioning files ===" && \
     ls -la /etc/grafana/provisioning/dashboards/ && \
     ls -la /etc/grafana/provisioning/datasources/ && \
-    echo "=== Dashboard content ===" && \
-    cat /var/lib/grafana/dashboards/test-dashboard.json && \
     chown -R grafana:grafana /var/lib/grafana && \
     chown -R grafana:grafana /etc/grafana && \
     echo "Permissions fixed!"
