@@ -219,14 +219,11 @@ async def dashboard(request: Request):
             }}
             .dashboard-container {{
                 background: white;
-                border-radius: 8px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                padding: 20px;
                 margin-bottom: 20px;
             }}
             iframe {{
                 border: none;
-                border-radius: 4px;
                 width: 100%;
                 height: 800px;
             }}
