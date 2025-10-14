@@ -240,20 +240,12 @@ async def dashboard(request: Request):
         </style>
     </head>
     <body>
-        <div class="container">
-            <h1>Voice Monitor Dashboard</h1>
-            <div class="info">
-                📊 실시간 거래 모니터링 대시보드 (Grafana)
-            </div>
-            <div class="dashboard-container">
-                <iframe src="{base_url}/grafana/d/fastapi-monitoring/fastapi-monitoring?orgId=1&refresh=5s" 
+        <iframe src="{base_url}/grafana/d/fastapi-monitoring/fastapi-monitoring?orgId=1&refresh=5s" 
                         width="100%" 
                         height="800px" 
                         frameborder="0"
                         allow="fullscreen">
                 </iframe>
-            </div>
-        </div>
     </body>
     </html>
     """
