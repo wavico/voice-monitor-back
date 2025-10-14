@@ -7,18 +7,29 @@
       }
     ]
   },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
   "id": 2,
   "uid": "fastapi-metrics-dashboard",
   "title": "이상거래 탐지 모니터링",
+  "links": [],
+  "liveNow": false,
   "timezone": "browser",
   "schemaVersion": 35,
   "version": 1,
-  "time": {          
+  "time": {
     "from": "now-1h",
     "to": "now"
   },
   "refresh": "5s",
-
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "timepicker": {},
+  "weekStart": "",
   "panels": [
     {
       "id": 1,
