@@ -2,10 +2,19 @@ global:
   scrape_interval: 5s
   evaluation_interval: 5s
 
-# Railway 단일 컨테이너 환경 설정
 scrape_configs:
   # FastAPI 메트릭 (Prometheus Instrumentator)
   - job_name: "fastapi"
     static_configs:
-      - targets: ["localhost:8000"]
+      - targets: ["monitor:8000"]
     metrics_path: "/metrics"
+
+  # Kafka JMX 메트릭
+  - job_name: "kafka"
+    static_configs:
+      - targets: ["kafka:7071"]
+
+  # Spark JMX 메트릭
+  - job_name: "spark"
+    static_configs:
+      - targets: ["spark:8090"]

@@ -61,7 +61,7 @@ services:
       - "3000:3000"
     volumes:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/datasources/datasource.local.yml:/etc/grafana/provisioning/datasources/datasource.yml
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana/provisioning/organizations:/etc/grafana/provisioning/organizations
       - ./grafana/dashboards:/var/lib/grafana/dashboards
