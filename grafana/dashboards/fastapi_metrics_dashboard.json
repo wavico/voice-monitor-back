@@ -10,7 +10,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": null,
   "uid": "fastapi-metrics-dashboard",
   "title": "이상거래 탐지 모니터링",
   "links": [],
